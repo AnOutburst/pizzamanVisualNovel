@@ -27,43 +27,48 @@ function live() {
 }
 
 function progressText() {
-
-    if (currentIndex == currentArr.length - 1) {
-        if (currentArr[currentIndex[0].includes('ending')]) {
-            console.log('ending: ' + currentArr[currentIndex][0].substring(7, currentArr[currentIndex][0].length - 1));
-            showEnd(currentArr[currentIndex][0].substring(7, 8));
+    try {
+        if (currentIndex == currentArr.length - 1) {
+            if (currentArr[currentIndex][0].includes('ending')) {
+                showEnd(currentArr[currentIndex][0].substring(6, currentArr[currentIndex][0].length));
+            } else {
+                dialog.style.display = "none";
+                dialog.innerHTML = "";
+                options.style.display = "block";
+                choices = currentArr[currentIndex][0].split('|');
+                buttomPromps = currentArr[currentIndex][1].split('|');
+                choice1.innerText = buttomPromps[0];
+                choice2.innerText = buttomPromps[1];
+                if (choices.length == 3) {
+                    choice3.style.display = "block";
+                    choice3.innerText = buttomPromps[2];
+                }
+                else {
+                    choice3.style.display = "none";
+                }
+            }
+        } else {
+            options.style.display = "none";
+            dialog.style.display = "block";
+            let words = currentArr[currentIndex][0];
+            dialog.innerHTML = words;
+            if (currentArr[currentIndex][1].includes("avatar")) {
+                let avatarName = currentArr[currentIndex][1].substring(7, currentArr[currentIndex][1].length - 1);
+                avatar(avatarName);
+            }
+            currentIndex++
         }
-        dialog.style.display = "none";
-        dialog.innerHTML = "";
-        options.style.display = "block";
-        console.log(currentArr[currentIndex][0]);
-        choices = currentArr[currentIndex][0].split('|');
-        buttomPromps = currentArr[currentIndex][1].split('|');
-        choice1.innerText = buttomPromps[0];
-        choice2.innerText = buttomPromps[1];
-        if (choices.length == 3) {
-            choice3.style.display = "block";
-            choice3.innerText = buttomPromps[2];
-        }
-        else {
-            choice3.style.display = "none";
-        }
-    } else {
-        options.style.display = "none";
-        dialog.style.display = "block";
-        let words = currentArr[currentIndex][0];
-        console.log(words);
-        dialog.innerHTML = words;
-        if (currentArr[currentIndex][1].includes("avatar")) {
-            let avatarName = currentArr[currentIndex][1].substring(7, currentArr[currentIndex][1].length - 1);
-            avatar(avatarName);
-        }
-        currentIndex++
+    }
+    catch (e) {
+        console.log(e);
     }
 }
 
 function showEnd(endingImg) {
-    console.log(endingImg)
+    pizzaMan.src="";
+    textbox.style.display = "none";
+    dialog.style.display = "none";
+    options.style.display = "none";
     switch (endingImg) {
         case 'Punch':
             endPic.src = "./assets/endings/punch.png";
@@ -74,6 +79,12 @@ function showEnd(endingImg) {
         case 'Together':
             endPic.src = "./assets/endings/together.png";
             break;
+        case 'Angry':
+            endPic.src = "./assets/endings/angry.png";
+            break;
+        /* case 'Marriage':
+             endPic.src = "./assets/endings/marriage.png";
+             break;*/
         default:
             endPic.src = "./assets/endings/generic.png";
             break;
@@ -83,7 +94,6 @@ function showEnd(endingImg) {
 function switchPath(path) {
     currentIndex = 0;
     currentArr = eval(choices[path]);
-    console.log(currentArr);
     options.style.display = "none";
     dialog.style.display = "block";
     choices = [];
@@ -91,7 +101,6 @@ function switchPath(path) {
 }
 
 function avatar(avNum) {
-    console.log(avNum)
     switch (avNum) {
         case "neutral":
             pizzaMan.src = "./assets/man/pizzaNeutral.png";
@@ -171,7 +180,7 @@ var Truth = [["'Man, I gotta be honest with you. I have no money on me.", ""]
     , ["truthApology|genericAngry", "Apologize to him|Get angry at him"]
 ];
 
-var truthApology = [["*You apologize profusely, making sure to state you know where his anger is coming from*", "avatar(sad)"],
+var truthApology = [["*You apologize profusely, making sure to state you know where his anger is coming from*", "avatar(sad)"]  
     , ["Im sorry man. I'll just go now. The pizza is on me.", ""]
     , ["As he begins to walk off, you find yourself still feeling bad. Should you stop him and try to console him or let him go?", ""]
     , ["letGo|truthConsole", "Let him go|Console Him"]
@@ -181,17 +190,28 @@ var letGo = [["*You simply watch as he walks off again. You hope he'll be okay",
     , ["endingLeave", ""]
 ];
 
-var truthConsole = [["'Wait, ' you exclaim, putting your hand on his shoulder. You proceed to have a long session of emotional support over pizza, and end up making a new friend."]
-    , ["endingTogether", ""]
+var truthConsole = [["'Wait, ' you exclaim, putting your hand on his shoulder. You proceed to have a long session of emotional support over pizza, and end up making a new friend.",""]
+    ,["endingTogether", ""]
 ];
-var genericAngry = [["'You know what screw you dude' you exclaim, putting your hand on his shoulder. You proceed to have a long session of emotional support over pizza, and end up making a new friend."]
-    , ["endingTogether", ""]
+var genericAngry = [["'You know what screw you dude' you exclaim, locking yourself into an argument for the next 20 minutes that", "avatar(angry)"]
+    , ["*As the argument ends the delivery man storms out angrily, throwing the pizza on the floor as he leaves. what a waste of time. and pizza.*", "avatar(none)"]
+    , ["endingAngry", ""]
 ];
-var Lie = [["'Hey there good looking, I may have misplaced my money, but I can do you one better.", ""]
-    , ["Are...Are you trying to seduce me?", "avatar(disgusted)"]
-    , ["Okay, first of all, I could get fired.", "avatar(annoyed)"]
-    , ["Second of all, how do you know what I want in a relationship", "avatar(sus)"]
-    , ["I actually went through some stuff recently and I don't think I'm ready for another relationship", "avatar(sad)"]
-    , ["It's clear to you that He's hurting right now. \nWill you continue to pursue him as is, or attempt to empathize?", ""]
-    , ["Pursue|Empathize", ""]
+var Lie = [["'Hey man, my money is in my other pair of pants. Why dont you give me the pizza and I can go grab it.'", ""]
+    , ["*Immediately, he sees through it*", "avatar(annoyed)"]
+    , ["I hear this crap atleast ten times a day dude. Are you gonna pay or what?", ""]
+    , ["*You find yourself with 3 options: Waste his time until he just leaves, verbally berate him, or assault him and steal the pizza", ""]
+    , ["waste|genericAngry|assault", "Waste his time|Berate him|Assault him"]
 ];
+
+var waste = [["*you proceed to spend two hours dodging his questions by reciting several hundred digits of pi.*", ""]
+    , ["Oh my god, fine! Just take the pizza dude! Just please, stop the nonrepeating numbers!", "avatar(angry)"]
+    , ["*he drops the pizza at your feet and runs away. You've won . . . but at what cost?", "avatar(none)"]
+    , ["endingLeave", ""]
+];
+
+var assault = [["*You decide to try to suprise him and punch him. This immediately fails, as he dodges, and returns a punch of his own. This is gonna hurt.*", "avatar(none)"]
+    , ["endingPunch", ""]
+];
+
+
