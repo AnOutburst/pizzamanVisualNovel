@@ -9,10 +9,12 @@ var choice3;
 var currentArr;
 var currentIndex;
 var choices;
+var endPic;
 
 function live() {
     currentArr = intro;
     currentIndex = 0;
+    endPic = document.getElementById("endPic");
     pizzaMan = document.getElementById("pizzaMan");
     textbox = document.getElementById("textbox")
     dialog = document.getElementById("textarea");
@@ -27,6 +29,10 @@ function live() {
 function progressText() {
 
     if (currentIndex == currentArr.length - 1) {
+        if (currentArr[currentIndex[0].includes('ending')]) {
+            console.log('ending: ' + currentArr[currentIndex][0].substring(7, currentArr[currentIndex][0].length - 1));
+            showEnd(currentArr[currentIndex][0].substring(7, 8));
+        }
         dialog.style.display = "none";
         dialog.innerHTML = "";
         options.style.display = "block";
@@ -35,11 +41,11 @@ function progressText() {
         buttomPromps = currentArr[currentIndex][1].split('|');
         choice1.innerText = buttomPromps[0];
         choice2.innerText = buttomPromps[1];
-        if (choices.length == 3){
+        if (choices.length == 3) {
             choice3.style.display = "block";
             choice3.innerText = buttomPromps[2];
         }
-        else{
+        else {
             choice3.style.display = "none";
         }
     } else {
@@ -53,6 +59,24 @@ function progressText() {
             avatar(avatarName);
         }
         currentIndex++
+    }
+}
+
+function showEnd(endingImg) {
+    console.log(endingImg)
+    switch (endingImg) {
+        case 'Punch':
+            endPic.src = "./assets/endings/punch.png";
+            break;
+        case 'Leave':
+            endPic.src = "./assets/endings/leave.png";
+            break;
+        case 'Together':
+            endPic.src = "./assets/endings/together.png";
+            break;
+        default:
+            endPic.src = "./assets/endings/generic.png";
+            break;
     }
 }
 
@@ -96,6 +120,9 @@ function avatar(avNum) {
         case "angry":
             pizzaMan.src = "./assets/man/pizzaAngry.png"
             break;
+        case "none":
+            pizzaMan.src = ""
+            break;
         default:
             pizzaMan.src = "./assets/man/pizzaNeutral.png";
             break;
@@ -118,14 +145,22 @@ var Flirt = [["'Hey there good looking, I may have misplaced my money, but I can
     , ["Okay, first of all, I could get fired.", "avatar(annoyed)"]
     , ["Second of all, how do you know what I want in a relationship", "avatar(sus)"]
     , ["I actually went through some stuff recently and I don't think I'm ready for another relationship", "avatar(sad)"]
-    , ["*It's clear to you that He's hurting right now. \nWill you continue to pursue him as is, or attempt to empathize?*",""]
-    , ["FlirtPursue|FlirtEmpathize","Pursue Flirtation|Empathize with him"]
+    , ["*It's clear to you that He's hurting right now. \nWill you continue to pursue him as is, or attempt to empathize?*", ""]
+    , ["FlirtPursue|FlirtEmpathize", "Pursue Flirtation|Empathize with him"]
 ];
 
-var FlirtPursue = [["'Hey baby don't you be like that. You just need a bit of loving to make things better.",""]
-    ,["Oh you know what man? Screw you! Not only are you pushy and bad at ordering pizza, your empathy skills are wack!", "avatar(angry)"]
-    
+var FlirtPursue = [["'Hey baby don't you be like that. You just need a bit of loving to make things better.", ""]
+    , ["Oh you know what man? Screw you! Not only are you pushy and bad at ordering pizza, your empathy skills are wack!", "avatar(angry)"]
+    , ["You know what, I'm leaving. Screw you and your pizza!", ""]
+    , ["The delivery man storms out angrily, throwing the pizza on the floor as he leaves.", "avatar(none)"]
+    , ["endingAngry", ""]
+];
 
+var FlirtEmpathize = [["'Hey man, I know how it feels be in that situation...'", ""]
+    , ["*You proceed to have a lengthy, emotional conversation. One hour later:*", "avatar(none)"]
+    , ["You know, now that im a better place, you're seem really nice. Would you like to go see a movie sometime?...", "avatar(blush)"]
+    , ["*Years of romance later...*", "avatar(none)"]
+    , ["endingMarriage", ""]
 ];
 
 var Truth = [["'Man, I gotta be honest with you. I have no money on me.", ""]
@@ -133,13 +168,30 @@ var Truth = [["'Man, I gotta be honest with you. I have no money on me.", ""]
     , ["I had to drive all this way for nothing!", "avatar(angry)"]
     , ["You realize I'm not getting payed for this right.", "avatar(leer)"]
     , ["*you feel bad for the guy, but he is being awfully rude right now. Do you want to try to apologize or get angry at him", ""]
-    , ["truthApology|genericAngry","Apologize to him|Get angry at him"]
+    , ["truthApology|genericAngry", "Apologize to him|Get angry at him"]
+];
+
+var truthApology = [["*You apologize profusely, making sure to state you know where his anger is coming from*", "avatar(sad)"],
+    , ["Im sorry man. I'll just go now. The pizza is on me.", ""]
+    , ["As he begins to walk off, you find yourself still feeling bad. Should you stop him and try to console him or let him go?", ""]
+    , ["letGo|truthConsole", "Let him go|Console Him"]
+];
+
+var letGo = [["*You simply watch as he walks off again. You hope he'll be okay", "avatar(none)"]
+    , ["endingLeave", ""]
+];
+
+var truthConsole = [["'Wait, ' you exclaim, putting your hand on his shoulder. You proceed to have a long session of emotional support over pizza, and end up making a new friend."]
+    , ["endingTogether", ""]
+];
+var genericAngry = [["'You know what screw you dude' you exclaim, putting your hand on his shoulder. You proceed to have a long session of emotional support over pizza, and end up making a new friend."]
+    , ["endingTogether", ""]
 ];
 var Lie = [["'Hey there good looking, I may have misplaced my money, but I can do you one better.", ""]
     , ["Are...Are you trying to seduce me?", "avatar(disgusted)"]
     , ["Okay, first of all, I could get fired.", "avatar(annoyed)"]
     , ["Second of all, how do you know what I want in a relationship", "avatar(sus)"]
     , ["I actually went through some stuff recently and I don't think I'm ready for another relationship", "avatar(sad)"]
-    , ["It's clear to you that He's hurting right now. \nWill you continue to pursue him as is, or attempt to empathize?",""]
-    , ["Pursue|Empathize",""]
+    , ["It's clear to you that He's hurting right now. \nWill you continue to pursue him as is, or attempt to empathize?", ""]
+    , ["Pursue|Empathize", ""]
 ];
