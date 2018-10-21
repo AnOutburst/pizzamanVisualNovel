@@ -82,9 +82,9 @@ function showEnd(endingImg) {
         case 'Angry':
             endPic.src = "./assets/endings/angry.png";
             break;
-        /* case 'Marriage':
-             endPic.src = "./assets/endings/marriage.png";
-             break;*/
+        case 'Marriage':
+             endPic.src = "./assets/endings/wedding.png";
+             break;
         default:
             endPic.src = "./assets/endings/generic.png";
             break;
