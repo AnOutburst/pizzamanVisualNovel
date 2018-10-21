@@ -1,0 +1,38 @@
+#main{
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 720px;
+    height: 720px;
+    background-image: url("./assets/background.png");
+}
+#pizzaMan{
+    position: absolute;
+    bottom: 0;
+}
+#textbox{
+    position: absolute;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    height: 25%;
+    background-color: aliceblue;
+}
+#textarea{
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: black;
+    font-size: 36px;
+}
+#choices{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 25%
+}
+button{
+    font-size: 36px;
+    padding: 15px;
+    border-radius: 3;
+}
